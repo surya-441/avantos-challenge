@@ -11,7 +11,7 @@ export interface FormType {
   description: string;
   is_reusable: boolean;
   field_schema: JsonSchema;
-  ui_schema: UISchemaElement;
+  ui_schema?: UISchemaElement;
   dynamic_field_config: Record<string, unknown>;
 }
 
