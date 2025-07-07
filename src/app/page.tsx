@@ -25,8 +25,8 @@ export default function Home() {
         fetchAndFillData();
     }, []);
 
-    const onNodeClick = (node_id: string) => {
-        setSelectedNode(node_id);
+    const onNodeClick = (nodeId: string) => {
+        setSelectedNode(nodeId);
     }
 
     const onCloseForm = () => {

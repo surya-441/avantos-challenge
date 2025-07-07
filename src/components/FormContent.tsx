@@ -2,8 +2,10 @@ import { FormType } from "@/types/APIresponse";
 
 export default function FormContent({
     form,
+    nodeName,
 }: {
     form: FormType | null | undefined;
+    nodeName: string;
 }) {
     if (!form) {
         return <div className="text-center text-red-500">Form not found.</div>;
@@ -13,7 +15,8 @@ export default function FormContent({
 
     return (
         <div>
-            <h2 className="text-2xl font-bold mb-4 text-center">{form.name}</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{nodeName}</h2>
+            <h3 className="text-xl font-bold mb-4 text-center">{form.name}</h3>
             <ul className="mb-2">
                 <li>
                     <span className="font-semibold">Description:</span>{" "}
