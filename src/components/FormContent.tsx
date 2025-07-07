@@ -7,7 +7,7 @@ export default function FormContent({
 }: {
     form: FormType | null | undefined;
     nodeName: string;
-    onFieldClick: () => void;
+    onFieldClick: (fieldName:string, fieldType:string) => void;
 }) {
     if (!form) {
         return <div className="text-center text-red-500">Form not found.</div>;
@@ -39,7 +39,7 @@ export default function FormContent({
                                 readOnly
                                 tabIndex={0}
                                 className="cursor-pointer bg-gray-800 text-white border border-gray-500 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                onClick={onFieldClick}
+                                onClick={() => onFieldClick(key, properties[key].avantos_type || "")}
                             />
                         </div>
                     ))}
