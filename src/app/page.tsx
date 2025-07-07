@@ -1,8 +1,6 @@
 "use client";
 import {
     ActionBlueprintGraphDescriptionType,
-    EdgeType,
-    FormType,
     NodeType,
 } from "@/types/APIresponse";
 import { fetchData } from "./api/getBlueprintGraphDescription";
