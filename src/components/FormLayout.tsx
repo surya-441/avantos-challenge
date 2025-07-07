@@ -19,15 +19,15 @@ export default function FormDetails({
     onCloseForm: () => void;
 }) {
     const node = data.nodes?.find((node: NodeType) => node.id === nodeId);
-    const formId = node?.data?.component_id;
     const nodeName: string = node?.data?.name || "Node Not Found";
-    const [prefillMappedForm, setPrefillMappedForm] = useState(node?.data.input_mapping || {});
 
+    const formId = node?.data?.component_id;
     const form: FormType | null | undefined =
         data.forms?.find((form) => form.id === formId) || null;
-
     const availablePrefillData = findAvailablePrefillData(data, nodeId);
+
     const [selectedField, setSelectedField] = React.useState<Field | null>(null);
+    const [prefillMappedForm, setPrefillMappedForm] = useState(node?.data.input_mapping || {});
 
     const onFieldClick = (fieldName:string, fieldType:string) => {
         setSelectedField({fieldName, fieldType});
@@ -83,6 +83,7 @@ export default function FormDetails({
                     clearPrefillMapping={handleClearPreFillMapping}
                 />
             )}
+            
         </div>
     );
 }
