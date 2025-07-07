@@ -1,21 +1,21 @@
 "use client";
 import {
     ActionBlueprintGraphDescriptionType,
+    EdgeType,
     FormType,
     NodeType,
 } from "@/types/APIresponse";
 import { fetchData } from "./APIrequest";
 import NodeGrid from "@/components/NodeGrid";
 import { useEffect, useState } from "react";
-import FormDetails from "@/components/FormDetails";
+import FormDetails from "@/components/FormLayout";
 
 export default function Home() {
 
     const [ data, setData] = useState<ActionBlueprintGraphDescriptionType | undefined>(undefined);
-    const [ form, setForm ] = useState<FormType | null>(null);
+    const [ selectedNode, setSelectedNode ] = useState<string | null>(null);
 
     const nodes: NodeType[] | null | undefined = data?.nodes;
-    const forms: FormType[] | null | undefined = data?.forms;
 
     useEffect(() => {
         const fetchAndFillData = async () => {
@@ -25,13 +25,16 @@ export default function Home() {
         fetchAndFillData();
     }, []);
 
-    const onNodeClick = (id: string) => {
-        const selectedForm = forms?.find((form) => form.id === id) || null;
-        setForm(selectedForm);
+    const onNodeClick = (node_id: string) => {
+        setSelectedNode(node_id);
     }
 
     const onCloseForm = () => {
-        setForm(null);
+        setSelectedNode(null);
+    }
+
+    if(!data) {
+        return <div className="flex min-h-screen flex-col items-center p-24 text-white">Loading...</div>;
     }
 
     return (
@@ -44,8 +47,8 @@ export default function Home() {
                     <p>The graph does not contain any nodes</p>
                 )}
             </div>
-           {form && (
-                <FormDetails form={form} onCloseForm={onCloseForm}/>
+           {selectedNode && (
+                <FormDetails data={data} nodeId={selectedNode} onCloseForm={onCloseForm}/>
             )}
         </main>
     );
