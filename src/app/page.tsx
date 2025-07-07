@@ -1,26 +1,24 @@
 import {
-  ActionBlueprintGraphDescriptionType,
-  FormType,
+    ActionBlueprintGraphDescriptionType,
+    NodeType,
 } from "@/types/APIresponse";
 import { fetchData } from "./APIrequest";
+import NodeGrid from "@/components/NodeGrid";
 
 export default async function Home() {
-  const data: ActionBlueprintGraphDescriptionType | undefined =
-    await fetchData();
-  const forms: FormType[] | null | undefined = data?.forms;
-  return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <h1 className="text-3xl font-bold underline">Coding Challenge</h1>
-      {forms && forms.length > 0 ? (
-        forms.map((form) => (
-          <div key={form.id} className="w-full max-w-md mt-4">
-            <h2 className="text-xl font-semibold mb-2">{form.name}</h2>
-            <p className="mb-4">{form.description}</p>
-          </div>
-        ))
-      ) : (
-        <p>No forms available</p>
-      )}
-    </main>
-  );
+    const data: ActionBlueprintGraphDescriptionType | undefined =
+        await fetchData();
+
+    const nodes: NodeType[] | null | undefined = data?.nodes;
+
+    return (
+        <main className="flex min-h-screen flex-col items-center p-24">
+            <h1 className="text-3xl font-bold underline mb-8">Coding Challenge</h1>
+            {nodes && nodes.length > 0 ? (
+                <NodeGrid nodes={nodes} />
+            ) : (
+                <p>The graph does not contain any nodes</p>
+            )}
+        </main>
+    );
 }
