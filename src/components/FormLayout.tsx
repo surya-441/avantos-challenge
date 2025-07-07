@@ -2,17 +2,22 @@ import { ActionBlueprintGraphDescriptionType, FormType, NodeType } from "@/types
 import React from "react";
 import FormContent from "./FormContent";
 import AutoFill from "./AutoFill";
+import { findAvailablePrefillData } from "@/helpers/traverseDAG";
 
 export default function FormDetails({ data, nodeId, onCloseForm }: { data: ActionBlueprintGraphDescriptionType, nodeId: string; onCloseForm: () => void }) {
     const node = data.nodes?.find((node: NodeType) => node.id === nodeId);
     const formId = node?.data?.component_id;
-    const form: FormType | null | undefined = data.forms?.find((form) => form.id === formId) || null;
     const nodeName: string = node?.data?.name || "Node Not Found";
+
+    const form: FormType | null | undefined = data.forms?.find((form) => form.id === formId) || null;
+
+    const availablePrefillData = findAvailablePrefillData(data, nodeId);
 
     const [ showAutoFillInfo, setShowAutoFillInfo ] = React.useState<boolean>(false);
 
     const onFieldClick = () => {
         setShowAutoFillInfo(true);
+        console.log("Available Prefill Data: ", availablePrefillData);
     }
 
     return (
