@@ -1,13 +1,18 @@
 import { FormType } from "@/types/APIresponse";
+import { clear } from "console";
 
 export default function FormContent({
     form,
     nodeName,
     onFieldClick,
+    prefillMappedForm,
+    clearPrefillMapping
 }: {
     form: FormType | null | undefined;
     nodeName: string;
-    onFieldClick: (fieldName:string, fieldType:string) => void;
+    onFieldClick: (fieldName: string, fieldType: string) => void;
+    prefillMappedForm: any;
+    clearPrefillMapping: (key: string) => () => void;
 }) {
     if (!form) {
         return <div className="text-center text-red-500">Form not found.</div>;
@@ -35,12 +40,32 @@ export default function FormContent({
                         <div key={key} className="flex items-center gap-2">
                             <input
                                 type="text"
-                                value={key + ": prefill data"}
+                                value={
+                                    key +
+                                    (key in prefillMappedForm
+                                        ? ": " + prefillMappedForm[key]
+                                        : "")
+                                }
                                 readOnly
                                 tabIndex={0}
                                 className="cursor-pointer bg-gray-800 text-white border border-gray-500 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                onClick={() => onFieldClick(key, properties[key].avantos_type || "")}
+                                onClick={() =>
+                                    onFieldClick(
+                                        key,
+                                        properties[key].avantos_type || ""
+                                    )
+                                }
                             />
+                            {key in prefillMappedForm && (
+                                <button
+                                    className="ml-2 text-gray-400 hover:text-red-500 text-lg font-bold focus:outline-none"
+                                    aria-label={`Clear ${key}`}
+                                    type="button"
+                                    onClick={clearPrefillMapping(key)}
+                                >
+                                    &times;
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>

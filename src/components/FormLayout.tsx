@@ -3,7 +3,7 @@ import {
     FormType,
     NodeType,
 } from "@/types/APIresponse";
-import React from "react";
+import React, { useState } from "react";
 import FormContent from "./FormContent";
 import AutoFill from "./AutoFill";
 import { findAvailablePrefillData } from "@/helpers/traverseDAG";
@@ -21,6 +21,7 @@ export default function FormDetails({
     const node = data.nodes?.find((node: NodeType) => node.id === nodeId);
     const formId = node?.data?.component_id;
     const nodeName: string = node?.data?.name || "Node Not Found";
+    const [prefillMappedForm, setPrefillMappedForm] = useState(node?.data.input_mapping || {});
 
     const form: FormType | null | undefined =
         data.forms?.find((form) => form.id === formId) || null;
@@ -30,14 +31,23 @@ export default function FormDetails({
 
     const onFieldClick = (fieldName:string, fieldType:string) => {
         setSelectedField({fieldName, fieldType});
-        console.log("Field Clicked: ", fieldName, fieldType);
-        console.log("Available Prefill Data: ", availablePrefillData);
     };
 
-    const handleSelectPrefillField = (field: Field) => {
+    const handleSelectPrefillField = (field: Field, source: string) => {
         console.log("Prefill Field Selected: ", field);
-
+        const mappingString = source + "." + field.fieldName;
+        console.log("Mapping String: ", mappingString);
+        if(selectedField && selectedField.fieldName)
+            setPrefillMappedForm((prev) => ({...prev, [selectedField.fieldName]: mappingString}));
         setSelectedField(null);
+    }
+
+    const handleClearPreFillMapping = (key: string) => () => {
+        setPrefillMappedForm((prev) => {
+            const newMapping = {...prev};
+            delete newMapping[key];
+            return newMapping;
+        });
     }
 
     return (
@@ -69,6 +79,8 @@ export default function FormDetails({
                     form={form}
                     nodeName={nodeName}
                     onFieldClick={onFieldClick}
+                    prefillMappedForm={prefillMappedForm}
+                    clearPrefillMapping={handleClearPreFillMapping}
                 />
             )}
         </div>
